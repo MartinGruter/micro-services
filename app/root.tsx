@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="grid grid-rows-[1fr_auto_1fr]">
         <Header />
         {children}
         <ScrollRestoration />
