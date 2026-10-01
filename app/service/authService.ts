@@ -12,13 +12,14 @@ export async function login(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginRequest),
     });
+    const data = await response.json() as TokenResponse;
 
-    return response.json();
+    return data;
   } catch (error) {
     console.log("Couldn't fetch: " + error);
   }
 }
-export function logout() {}
-export function getToken() {}
-export function getCurrentUser() {}
-export function isAuthenticated() {}
+// export function logout() {}
+// export function getToken() {}
+// export function getCurrentUser() {}
+// export function isAuthenticated() {}

@@ -1,6 +1,6 @@
 export type TokenResponse = {
     accessToken: string,
-    expiresIn: bigint,
+    expiresIn: number,
     subject: string,
     roles: string[]
 }
