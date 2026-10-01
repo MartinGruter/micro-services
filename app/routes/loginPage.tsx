@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Form } from "react-router";
 import { login } from "~/service/authService";
 
 import { redirect } from "react-router";
@@ -10,17 +10,16 @@ export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
 
   const accessToken = session.get("accessToken");
-  const roles = session.get("roles");
 
   if (accessToken) {
     throw redirect("/");
   }
 
-  return { roles };
+  return null;
 }
 
 export async function action({ request }: Route.ActionArgs) {
-    console.log("Action körs")
+  console.log("Action körs");
   const session = await getSession(request.headers.get("Cookie"));
 
   const formData = await request.formData();
@@ -45,26 +44,16 @@ export async function action({ request }: Route.ActionArgs) {
   });
 }
 
-export default function LoginPage() {
-  //   const navigate = useNavigate();
+export default function LoginPage({ actionData }: Route.ComponentProps) {
+  const error = actionData?.error;
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  //   const handleSubmit = async (event: { preventDefault: () => void }) => {
-  //     event.preventDefault();
-  //     try {
-  //       await login({ username, password });
-
-  //       navigate("/");
-  //     } catch (error) {
-  //       console.log("Couldn't navigate");
-  //     }
-  //   };
-
   return (
     <main>
+      {error ? <div>{error}</div> : null}
       <h3>Login</h3>
-      <form method="POST">
+      <Form method="POST">
         <input
           type="email"
           name="username"
@@ -78,7 +67,7 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Login</button>
-      </form>
+      </Form>
     </main>
   );
 }

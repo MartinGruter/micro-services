@@ -16,7 +16,7 @@ export async function login(
 
     return data;
   } catch (error) {
-    console.log("Couldn't fetch: " + error);
+    
   }
 }
 // export function logout() {}
