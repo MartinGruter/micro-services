@@ -29,22 +29,16 @@ export default function WelcomePage({ loaderData }: Route.ComponentProps) {
 
         <div className="mt-8">
           <h2 className="text-xl font-semibold">Your roles</h2>
-          {roles.length > 0 ? (
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {roles.map((role) => (
-                <li
-                  className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-950 dark:text-blue-200"
-                  key={role}
-                >
-                  {role}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-3 text-slate-600 dark:text-slate-300">
-              No roles are assigned to this account.
-            </p>
-          )}
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {roles.map((role) => (
+              <li
+                className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-950 dark:text-blue-200"
+                key={role}
+              >
+                {role}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </main>
