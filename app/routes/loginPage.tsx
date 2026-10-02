@@ -12,7 +12,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const accessToken = session.get("accessToken");
 
   if (accessToken) {
-    throw redirect("/");
+    throw redirect("/welcome");
   }
 
   return null;
@@ -37,7 +37,7 @@ export async function action({ request }: Route.ActionArgs) {
   session.set("subject", tokenResponse.subject);
   session.set("roles", tokenResponse.roles);
 
-  return redirect("/", {
+  return redirect("/welcome", {
     headers: {
       "Set-Cookie": await commitSession(session),
     },
