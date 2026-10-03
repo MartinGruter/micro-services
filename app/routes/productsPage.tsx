@@ -67,7 +67,12 @@ export default function ProductsPage() {
               <dl className="mt-5 space-y-2">
                 <div className="flex justify-between gap-4">
                   <dt className="font-medium">Price</dt>
-                  <dd>{product.price}</dd>
+                  <dd>
+                    {product.price.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </dd>
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="font-medium">Stock</dt>
