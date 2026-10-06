@@ -1,3 +1,4 @@
+import { getSession } from "~/sessions.server";
 import type { LoginRequest } from "~/types/LoginRequest";
 import type { TokenResponse } from "~/types/TokenResponse";
 
@@ -12,14 +13,18 @@ export async function login(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginRequest),
     });
+
+    if (!response.ok) {
+      return undefined;
+    }
+
     const data = await response.json() as TokenResponse;
 
     return data;
   } catch (error) {
-    
+    console.error("Login request failed: ", error);
+    return undefined;
   }
 }
-// export function logout() {}
-// export function getToken() {}
-// export function getCurrentUser() {}
-// export function isAuthenticated() {}
+// export async function logout() {}
+// export async function getToken() {}

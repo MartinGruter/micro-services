@@ -1,21 +1,14 @@
 import {
   isRouteErrorResponse,
-  redirect,
   useLoaderData,
   useRouteError,
-  type LoaderFunctionArgs,
 } from "react-router";
 import { getProducts } from "~/service/productService";
-import { getSession } from "~/sessions.server";
+import type { Route } from "./+types/productsPage";
+import { tokenContext } from "~/context/context";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const accessToken = session.get("accessToken");
-
-  if (!accessToken) {
-    throw redirect("/login");
-  }
-
+export async function loader({ context }: Route.LoaderArgs) {
+  const accessToken = context.get(tokenContext);
   return { products: await getProducts(accessToken) };
 }
 

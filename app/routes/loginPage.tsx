@@ -19,7 +19,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export async function action({ request }: Route.ActionArgs) {
-  console.log("Action körs");
   const session = await getSession(request.headers.get("Cookie"));
 
   const formData = await request.formData();
