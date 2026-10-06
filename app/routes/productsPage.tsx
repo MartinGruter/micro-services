@@ -1,26 +1,17 @@
 import { useState } from "react";
 import {
   isRouteErrorResponse,
-  redirect,
   useLoaderData,
   useRouteError,
-  type LoaderFunctionArgs,
 } from "react-router";
 import Cart from "~/components/Cart";
 import ProductCard from "~/components/ProductCard";
 import { getProducts } from "~/service/productService";
-import { getSession } from "~/sessions.server";
-import type { CartItem } from "~/types/CartItem";
-import type { Product } from "~/types/Product";
+import type { Route } from "./+types/productsPage";
+import { tokenContext } from "~/context/context";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const accessToken = session.get("accessToken");
-
-  if (!accessToken) {
-    throw redirect("/login");
-  }
-
+export async function loader({ context }: Route.LoaderArgs) {
+  const accessToken = context.get(tokenContext);
   return { products: await getProducts(accessToken) };
 }
 
