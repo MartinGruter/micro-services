@@ -1,8 +1,11 @@
+import { useState } from "react";
 import {
   isRouteErrorResponse,
   useLoaderData,
   useRouteError,
 } from "react-router";
+import Cart from "~/components/Cart";
+import ProductCard from "~/components/ProductCard";
 import { getProducts } from "~/service/productService";
 import type { Route } from "./+types/productsPage";
 import { tokenContext } from "~/context/context";
@@ -37,6 +40,22 @@ export function ErrorBoundary() {
 
 export default function ProductsPage() {
   const { products } = useLoaderData<typeof loader>();
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [showCart, setShowCart] = useState(false);
+
+  function addToCart(product: Product) {
+    const cartItem: CartItem = {
+      ...product,
+      quantity: 1,
+    };
+
+    setCartItems(currentItems => [
+      ...currentItems,
+      cartItem,
+    ]);
+
+    alert(`${product.name} has been added to cart.`);
+  }
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -49,33 +68,17 @@ export default function ProductsPage() {
       {products.length > 0 && (
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
-            <article
-              className="rounded-lg border border-slate-300 p-5 shadow-sm dark:border-slate-700"
-              key={product.id}
-            >
-              <h2 className="text-xl font-semibold">{product.name}</h2>
-              <p className="mt-3 text-slate-600 dark:text-slate-300">
-                {product.description}
-              </p>
-              <dl className="mt-5 space-y-2">
-                <div className="flex justify-between gap-4">
-                  <dt className="font-medium">Price</dt>
-                  <dd>
-                    {product.price.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    })}
-                  </dd>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="font-medium">Stock</dt>
-                  <dd>{product.stock}</dd>
-                </div>
-              </dl>
-            </article>
+            <ProductCard key={product.id} product={product} onAdd={addToCart}/>
           ))}
         </div>
       )}
+      <button onClick={() => setShowCart(!showCart)}>
+        {showCart
+        ? "Hide cart"
+        : "Show cart"
+        }
+        {showCart && <Cart items={cartItems}/>}
+      </button>
     </main>
   );
 }
