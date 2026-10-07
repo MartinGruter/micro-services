@@ -9,6 +9,8 @@ import ProductCard from "~/components/ProductCard";
 import { getProducts } from "~/service/productService";
 import type { Route } from "./+types/productsPage";
 import { tokenContext } from "~/context/context";
+import type { CartItem } from "~/types/CartItem";
+import type { Product } from "~/types/Product";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const accessToken = context.get(tokenContext);
@@ -68,16 +70,16 @@ export default function ProductsPage() {
       {products.length > 0 && (
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} onAdd={addToCart}/>
+            <ProductCard key={product.id} product={product} onAdd={addToCart} />
           ))}
         </div>
       )}
       <button onClick={() => setShowCart(!showCart)}>
         {showCart
-        ? "Hide cart"
-        : "Show cart"
+          ? "Hide cart"
+          : "Show cart"
         }
-        {showCart && <Cart items={cartItems}/>}
+        {showCart && <Cart items={cartItems} />}
       </button>
     </main>
   );
