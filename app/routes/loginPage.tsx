@@ -11,6 +11,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   const accessToken = session.get("accessToken");
 
+  // check for token expiration
+
   if (accessToken) {
     throw redirect("/welcome");
   }

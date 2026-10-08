@@ -13,6 +13,7 @@ import "./app.css";
 import { Footer } from "./components/Footer";
 
 import { Header } from "./components/Header";
+import { getSession } from "./sessions.server";
 
 
 export const links: Route.LinksFunction = () => [
@@ -28,6 +29,13 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const isLoggedIn = Boolean(session.get("accessToken"));
+  // check for token expiration
+  return { isLoggedIn };
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -37,7 +45,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="grid grid-rows-[1fr_auto_1fr]">
+      <body className="min-h-screen grid grid-rows-[auto_1fr_auto]">
         <Header />
         {children}
         <Footer />
