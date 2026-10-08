@@ -8,4 +8,6 @@ export default [
         route("welcome", "routes/welcomePage.tsx"),
         route("products", "routes/productsPage.tsx"),
     ]),
+
+    route("*", "routes/NotFound.tsx"),
 ] satisfies RouteConfig;
