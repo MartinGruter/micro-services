@@ -1,5 +1,5 @@
 import { redirect, type MiddlewareFunction } from "react-router";
-import { tokenContext } from "~/context/context";
+import { rolesContext, tokenContext } from "~/context/context";
 import { getSession } from "~/sessions.server";
 
 export const authMiddleware: MiddlewareFunction<Response> = async ({
@@ -8,6 +8,7 @@ export const authMiddleware: MiddlewareFunction<Response> = async ({
 }) => {
     const session = await getSession(request.headers.get("Cookie"));
     const accessToken = session.get("accessToken");
+    const roles = session.get("roles") ?? [];
 
     // check for token expiration
 
@@ -16,4 +17,5 @@ export const authMiddleware: MiddlewareFunction<Response> = async ({
     }
 
     context.set(tokenContext, accessToken);
+    context.set(rolesContext, roles);
 };
