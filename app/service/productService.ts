@@ -7,6 +7,10 @@ export async function getProducts(accessToken: string): Promise<Product[]> {
     throw new Error("VITE_API_PRODUCT_SERVICE_URL is missing.");
   }
 
+  const url = `${PRODUCT_SERVICE_URL.replace(/\/$/, "")}/products`;
+
+  console.log("Fetching:", url, "token:", accessToken ? "present" : "MISSING");
+
   const response = await fetch(
     `${PRODUCT_SERVICE_URL.replace(/\/$/, "")}/products`,
     {
@@ -17,7 +21,10 @@ export async function getProducts(accessToken: string): Promise<Product[]> {
   );
 
   if (!response.ok) {
-    throw new Error("Unable to load products.");
+    const body = await response.text();
+    throw new Error(
+      `Unable to load products. Status: ${response.status} ${body}`,
+    );
   }
 
   return response.json() as Promise<Product[]>;
