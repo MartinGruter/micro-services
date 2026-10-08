@@ -10,6 +10,8 @@ export const authMiddleware: MiddlewareFunction<Response> = async ({
     const accessToken = session.get("accessToken");
     const roles = session.get("roles") ?? [];
 
+    // check for token expiration
+
     if (!accessToken) {
         throw redirect("/login");
     }
