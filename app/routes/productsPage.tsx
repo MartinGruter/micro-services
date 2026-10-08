@@ -46,17 +46,75 @@ export default function ProductsPage() {
   const [showCart, setShowCart] = useState(false);
 
   function addToCart(product: Product) {
-    const cartItem: CartItem = {
-      ...product,
-      quantity: 1,
+    const index = cartItems.findIndex(
+      (item) => item.id === product.id
+    );
+
+    if (index === -1) {
+      const newItem = {...product, quantity: 1};
+      setCartItems([...cartItems, newItem]);
+      return;
+    }
+
+    const currentItem = cartItems[index];
+
+    if (currentItem.quantity >= currentItem.stock) {
+      alert("There are no more products in storage")
+      return;
+    }
+
+    const updatedItems = [...cartItems];
+    updatedItems[index] = {
+      ...currentItem,
+      quantity: currentItem.quantity + 1,
     };
 
-    setCartItems(currentItems => [
-      ...currentItems,
-      cartItem,
-    ]);
+    setCartItems(updatedItems);
 
     alert(`${product.name} has been added to cart.`);
+  }
+
+  function increaseQuantity(productId: number) {
+    const index = cartItems.findIndex(
+      (item) => item.id === productId
+    );
+
+    const currentItem = cartItems[index]
+
+    if (currentItem.quantity >= currentItem.stock){
+      alert("There are no more products in storage")
+      return;
+    }
+
+    const updatedItems = [...cartItems];
+    updatedItems[index] = {
+      ...currentItem,
+      quantity: currentItem.quantity + 1
+    };
+
+    setCartItems(updatedItems)
+  }
+
+  function decreaseQuantity(productId: number) {
+    const index = cartItems.findIndex(
+      (item) => item.id === productId
+    );
+
+    const currentItem = cartItems[index];
+    const updatedItems = [...cartItems];
+
+    if (currentItem.quantity === 1){
+      updatedItems.splice(index, 1);
+      setCartItems(updatedItems);
+      return;
+    }
+
+    updatedItems[index] = {
+      ...currentItem,
+      quantity: currentItem.quantity - 1
+    }
+
+    setCartItems(updatedItems)
   }
 
   return (
@@ -79,7 +137,11 @@ export default function ProductsPage() {
           ? "Hide cart"
           : "Show cart"
         }
-        {showCart && <Cart items={cartItems} />}
+        {showCart && <Cart 
+        items={cartItems}
+        onIncrease={increaseQuantity}
+        onDecrease={decreaseQuantity}
+        />}
       </button>
     </main>
   );
