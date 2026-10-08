@@ -26,5 +26,3 @@ export async function login(
     return undefined;
   }
 }
-// export async function logout() {}
-// export async function getToken() {}

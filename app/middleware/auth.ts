@@ -9,6 +9,8 @@ export const authMiddleware: MiddlewareFunction<Response> = async ({
     const session = await getSession(request.headers.get("Cookie"));
     const accessToken = session.get("accessToken");
 
+    // check for token expiration
+
     if (!accessToken) {
         throw redirect("/login");
     }
