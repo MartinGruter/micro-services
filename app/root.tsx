@@ -13,6 +13,7 @@ import "./app.css";
 import { Footer } from "./components/Footer";
 
 import { Header } from "./components/Header";
+import { getSession } from "./sessions.server";
 
 
 export const links: Route.LinksFunction = () => [
@@ -27,6 +28,13 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const isLoggedIn = Boolean(session.get("accessToken"));
+  // check for token expiration
+  return { isLoggedIn };
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
