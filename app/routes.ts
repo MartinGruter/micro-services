@@ -7,6 +7,8 @@ export default [
     layout("routes/protected-layout.tsx", [
         route("welcome", "routes/welcomePage.tsx"),
         route("products", "routes/productsPage.tsx"),
-        route("admin/products", "routes/adminProductsPage.tsx"),
+        layout("routes/admin-layout.tsx", [
+            route("admin/products", "routes/adminProductsPage.tsx"),
+        ]),
     ]),
 ] satisfies RouteConfig;
