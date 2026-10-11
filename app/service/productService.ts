@@ -7,10 +7,6 @@ export async function getProducts(accessToken: string): Promise<Product[]> {
     throw new Error("VITE_API_PRODUCT_SERVICE_URL is missing.");
   }
 
-  const url = `${PRODUCT_SERVICE_URL.replace(/\/$/, "")}/products`;
-
-  console.log("Fetching:", url, "token:", accessToken ? "present" : "MISSING");
-
   const response = await fetch(
     `${PRODUCT_SERVICE_URL.replace(/\/$/, "")}/products`,
     {
