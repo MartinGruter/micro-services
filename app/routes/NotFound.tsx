@@ -23,7 +23,7 @@ export default function NotFound() {
                 <h1 className="text-2xl font-medium">
                     This listing went dark.
                 </h1>
-                <p className="max-w-xs mx-auto mt-4 text-[15px] text-slate-400 leading-relaxed">
+                <p className="max-w-xs mx-auto mt-4 text-slate-400 leading-relaxed">
                     Maybe it never existed. Maybe someone made sure it wouldn't. Either
                     way, there's nothing here under that name.
                 </p>
