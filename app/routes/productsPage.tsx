@@ -46,12 +46,10 @@ export default function ProductsPage() {
   const [showCart, setShowCart] = useState(false);
 
   function addToCart(product: Product) {
-    const index = cartItems.findIndex(
-      (item) => item.id === product.id
-    );
+    const index = cartItems.findIndex((item) => item.id === product.id);
 
     if (index === -1) {
-      const newItem = {...product, quantity: 1};
+      const newItem = { ...product, quantity: 1 };
       setCartItems([...cartItems, newItem]);
       return;
     }
@@ -59,7 +57,7 @@ export default function ProductsPage() {
     const currentItem = cartItems[index];
 
     if (currentItem.quantity >= currentItem.stock) {
-      alert("There are no more products in storage")
+      alert("There are no more products in storage");
       return;
     }
 
@@ -75,35 +73,31 @@ export default function ProductsPage() {
   }
 
   function increaseQuantity(productId: number) {
-    const index = cartItems.findIndex(
-      (item) => item.id === productId
-    );
+    const index = cartItems.findIndex((item) => item.id === productId);
 
-    const currentItem = cartItems[index]
+    const currentItem = cartItems[index];
 
-    if (currentItem.quantity >= currentItem.stock){
-      alert("There are no more products in storage")
+    if (currentItem.quantity >= currentItem.stock) {
+      alert("There are no more products in storage");
       return;
     }
 
     const updatedItems = [...cartItems];
     updatedItems[index] = {
       ...currentItem,
-      quantity: currentItem.quantity + 1
+      quantity: currentItem.quantity + 1,
     };
 
-    setCartItems(updatedItems)
+    setCartItems(updatedItems);
   }
 
   function decreaseQuantity(productId: number) {
-    const index = cartItems.findIndex(
-      (item) => item.id === productId
-    );
+    const index = cartItems.findIndex((item) => item.id === productId);
 
     const currentItem = cartItems[index];
     const updatedItems = [...cartItems];
 
-    if (currentItem.quantity === 1){
+    if (currentItem.quantity === 1) {
       updatedItems.splice(index, 1);
       setCartItems(updatedItems);
       return;
@@ -111,10 +105,10 @@ export default function ProductsPage() {
 
     updatedItems[index] = {
       ...currentItem,
-      quantity: currentItem.quantity - 1
-    }
+      quantity: currentItem.quantity - 1,
+    };
 
-    setCartItems(updatedItems)
+    setCartItems(updatedItems);
   }
 
   return (
@@ -133,16 +127,16 @@ export default function ProductsPage() {
         </div>
       )}
       <button onClick={() => setShowCart(!showCart)}>
-        {showCart
-          ? "Hide cart"
-          : "Show cart"
-        }
-        {showCart && <Cart 
-        items={cartItems}
-        onIncrease={increaseQuantity}
-        onDecrease={decreaseQuantity}
-        />}
+        {showCart ? "Hide cart" : "Show cart"}
       </button>
+
+      {showCart && (
+        <Cart
+          items={cartItems}
+          onIncrease={increaseQuantity}
+          onDecrease={decreaseQuantity}
+        />
+      )}
     </main>
   );
 }
