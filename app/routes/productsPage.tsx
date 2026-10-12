@@ -4,13 +4,13 @@ import {
   useLoaderData,
   useRouteError,
 } from "react-router";
-import Cart from "~/components/Cart";
 import ProductCard from "~/components/ProductCard";
 import { getProducts } from "~/service/productService";
 import type { Route } from "./+types/productsPage";
 import { tokenContext } from "~/context/context";
-import type { CartItem } from "~/types/CartItem";
+import type { CartItemType } from "~/types/CartItemType";
 import type { Product } from "~/types/Product";
+import Cart from "~/components/cart/Cart";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const accessToken = context.get(tokenContext);
@@ -42,7 +42,7 @@ export function ErrorBoundary() {
 
 export default function ProductsPage() {
   const { products } = useLoaderData<typeof loader>();
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [showCart, setShowCart] = useState(false);
 
   function addToCart(product: Product) {
@@ -135,6 +135,7 @@ export default function ProductsPage() {
           items={cartItems}
           onIncrease={increaseQuantity}
           onDecrease={decreaseQuantity}
+          onClose={() => setShowCart(false)}
         />
       )}
     </main>
