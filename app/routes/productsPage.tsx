@@ -4,13 +4,13 @@ import {
   useLoaderData,
   useRouteError,
 } from "react-router";
-import Cart from "~/components/Cart";
 import ProductCard from "~/components/ProductCard";
 import { getProducts } from "~/service/productService";
 import type { Route } from "./+types/productsPage";
 import { tokenContext } from "~/context/context";
 import type { CartItemType } from "~/types/CartItemType";
 import type { Product } from "~/types/Product";
+import Cart from "~/components/cart/Cart";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const accessToken = context.get(tokenContext);

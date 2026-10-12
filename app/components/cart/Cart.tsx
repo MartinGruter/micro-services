@@ -1,6 +1,6 @@
 import { IoClose } from "react-icons/io5";
 import type { CartItemType } from "~/types/CartItemType";
-import { CartItem } from "./cart/CartItem";
+import { CartItem } from "./CartItem";
 
 type CartProps = {
     items: CartItemType[];
