@@ -9,7 +9,9 @@ const product: Product = {
     name: "Computer",
     description: "Very good computer",
     price: 499,
-    stock: 10
+    stock: 10,
+    category: "ELECTRONICS",
+    imageUrl: "https://example.com/image.jpg"
 };
 
 afterEach(() => {
