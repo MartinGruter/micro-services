@@ -1,5 +1,11 @@
 import { createCookieSessionStorage } from "react-router";
 
+const sessionSecret = process.env.SESSION_SECRET;
+
+if (!sessionSecret) {
+  throw new Error("SESSION_SECRET environment variable is required.");
+}
+
 type SessionData = {
   accessToken: string;
   expiresIn: number;
@@ -19,8 +25,8 @@ const { getSession, commitSession, destroySession } =
       maxAge: 3600,
       path: "/",
       sameSite: "lax",
-      secrets: [process.env.SESSION_SECRET || "s3cret1"],
-      secure: true,
+      secrets: [sessionSecret],
+      secure: process.env.NODE_ENV === "production",
     },
   });
 

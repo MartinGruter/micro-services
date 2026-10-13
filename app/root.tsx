@@ -61,30 +61,55 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
+  let status = 500;
+  let message = "Something went wrong.";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
+    status = error.status;
+    message =
+      error.status === 403
+        ? "Access denied."
+        : error.status === 404
+          ? "Not found."
+          : "Something went wrong.";
     details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
+      error.status === 403
+        ? "You don't have clearance for this."
+        : error.status === 404
+          ? "There's no record of that page."
+          : error.statusText || details;
+  } else if (import.meta.env.DEV && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
+    <main className="flex items-center justify-center">
+      <div className="w-full max-w-sm text-center">
+        <div className="size-36 mb-10 mx-auto relative">
+          <div className="absolute inset-0 -rotate-6 rounded-full border-[3px] border-[#8a2e2a]/80" />
+          <div className="absolute inset-0 -rotate-6 flex flex-col items-center justify-center">
+            <span className="text-5xl font-semibold text-[#8a2e2a]">
+              {status}
+            </span>
+          </div>
+        </div>
+
+        <h1 className="text-2xl font-medium">
+          {message}
+        </h1>
+        <p className="max-w-xs mx-auto mt-4 text-slate-400 leading-relaxed">
+          {details}
+        </p>
+
+        {stack && (
+          <pre className="max-h-64 mt-8 p-4 overflow-auto rounded-sm border border-[#9c9177]/20 text-left text-xs">
+            <code>{stack}</code>
+          </pre>
+        )}
+      </div>
     </main>
   );
 }
