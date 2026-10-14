@@ -1,19 +1,33 @@
-import { useLoaderData } from "react-router";
+import { data, Link, useLoaderData } from "react-router";
 import { tokenContext } from "~/context/context";
 import { getProducts } from "~/service/productService";
+import { commitSession, getSession } from "~/sessions.server";
 import type { Route } from "./+types/adminProductsPage";
 
-export async function loader({ context }: Route.LoaderArgs) {
+export async function loader({ request, context }: Route.LoaderArgs) {
   const accessToken = context.get(tokenContext);
-  return { products: await getProducts(accessToken) };
+  const products = await getProducts(accessToken);
+  const session = await getSession(request.headers.get("Cookie"));
+  const message = session.get("productCreated");
+
+  return data({ products, message }, {
+    headers: message ? { "Set-Cookie": await commitSession(session) } : undefined,
+  });
 }
 
 export default function AdminProductsPage() {
-  const { products } = useLoaderData<typeof loader>();
+  const { products, message } = useLoaderData<typeof loader>();
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-12">
       <h1 className="text-3xl font-bold">Product overview</h1>
+      <Link
+        to="/admin/products/new"
+        className="mt-6 inline-block rounded-sm border-2 border-slate-600 px-6 py-3 text-sm font-medium transition-colors hover:bg-slate-800 hover:text-slate-100"
+      >
+        Create product
+      </Link>
+      {message && <p role="status" className="mt-4">{message}</p>}
 
       {products.length === 0 ? (
         <p className="mt-6">No products found.</p>

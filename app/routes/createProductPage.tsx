@@ -1,8 +1,9 @@
-import { data, useNavigation } from "react-router";
+import { data, redirect, useNavigation } from "react-router";
 import ProductForm, { type ProductFormValues } from "~/components/ProductForm";
 import { tokenContext } from "~/context/context";
 import { createProduct } from "~/service/productService";
 import { categories } from "~/types/Category";
+import { commitSession, getSession } from "~/sessions.server";
 import type { Route } from "./+types/createProductPage";
 
 export async function action({ request, context }: Route.ActionArgs) {
@@ -47,7 +48,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 
   if (error || !category) {
-    return data({ error: error ?? "Select a valid category.", values, success: false }, { status: 400 });
+    return data({ error: error ?? "Select a valid category.", values }, { status: 400 });
   }
 
   try {
@@ -56,11 +57,14 @@ export async function action({ request, context }: Route.ActionArgs) {
     return data({
       error: error instanceof Error ? error.message : "Unable to create the product.",
       values,
-      success: false,
     }, { status: 502 });
   }
 
-  return { error: undefined, values: undefined, success: true };
+  const session = await getSession(request.headers.get("Cookie"));
+  session.flash("productCreated", "Product created successfully.");
+  return redirect("/admin/products", {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
 }
 
 export default function CreateProductPage({ actionData }: Route.ComponentProps) {
@@ -69,15 +73,11 @@ export default function CreateProductPage({ actionData }: Route.ComponentProps) 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-12">
       <h1 className="mb-6 text-3xl font-bold">Create product</h1>
-      {actionData?.success ? (
-        <p role="status">Product created successfully.</p>
-      ) : (
-        <ProductForm
-          values={actionData?.values}
-          error={actionData?.error}
-          isSubmitting={navigation.state !== "idle"}
-        />
-      )}
+      <ProductForm
+        values={actionData?.values}
+        error={actionData?.error}
+        isSubmitting={navigation.state !== "idle"}
+      />
     </main>
   );
 }
