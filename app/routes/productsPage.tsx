@@ -3,6 +3,7 @@ import {
   isRouteErrorResponse,
   useLoaderData,
   useRouteError,
+  useFetcher,
 } from "react-router";
 import ProductCard from "~/components/ProductCard";
 import { getProducts } from "~/service/productService";
@@ -15,7 +16,24 @@ import Cart from "~/components/cart/Cart";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const accessToken = context.get(tokenContext);
-  return { products: await getProducts(accessToken), token: accessToken };
+  return { products: await getProducts(accessToken) };
+}
+
+export async function action({ request, context }: Route.ActionArgs) {
+  const accessToken = context.get(tokenContext);
+  const formData = await request.formData();
+  const orderRequest = JSON.parse(formData.get("order") as string);
+
+  try {
+    await createOrder(accessToken, orderRequest);
+    return { success: true as const };
+  } catch (error) {
+    console.log("Checkout failed:", error);
+    return {
+      success: false as const,
+      error: "Something went wrong with creating the order. Please try again.",
+    };
+  }
 }
 
 export function HydrateFallback() {
@@ -42,7 +60,8 @@ export function ErrorBoundary() {
 }
 
 export default function ProductsPage() {
-  const { products, token } = useLoaderData<typeof loader>();
+  const { products } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [cartLoaded, setCartLoaded] = useState(false);
   const [showCart, setShowCart] = useState(false);
@@ -128,30 +147,31 @@ export default function ProductsPage() {
     setCartItems(updatedItems);
   }
 
-  const handleCheckout = async () => {
-    if (cartItems.length === 0) {
-      alert("Cart is empty");
-      return;
-    }
+  function handleCheckout() {
+  if (cartItems.length === 0) {
+    alert("Cart is empty");
+    return;
+  }
 
-    const orderRequest = {
-      items: cartItems.map((item) => ({
-        productId: item.id,
-        quantity: item.quantity
-      })),
-    };
-
-    try {
-      await createOrder(token, orderRequest)
-      setCartItems([]);
-      sessionStorage.removeItem("cart")
-      alert(`Order is created`)
-    } catch {
-      alert(`Something went wrong with creating order`)
-    }
-
-
+  const orderRequest = {
+    items: cartItems.map((item) => ({
+      productId: item.id,
+      quantity: item.quantity,
+    })),
   };
+
+  fetcher.submit(
+    { order: JSON.stringify(orderRequest) },
+    { method: "post" },
+  );
+}
+
+useEffect(() => {
+  if (fetcher.data?.success) {
+    setCartItems([]);
+    alert("Order is created");
+  }
+}, [fetcher.data]);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-12">
