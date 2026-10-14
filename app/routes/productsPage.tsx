@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   isRouteErrorResponse,
   useLoaderData,
   useRouteError,
+  useFetcher,
 } from "react-router";
 import ProductCard from "~/components/ProductCard";
 import { getProducts } from "~/service/productService";
@@ -10,11 +11,29 @@ import type { Route } from "./+types/productsPage";
 import { tokenContext } from "~/context/context";
 import type { CartItemType } from "~/types/CartItemType";
 import type { Product } from "~/types/Product";
+import { createOrder } from "~/service/orderService";
 import Cart from "~/components/cart/Cart";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const accessToken = context.get(tokenContext);
   return { products: await getProducts(accessToken) };
+}
+
+export async function action({ request, context }: Route.ActionArgs) {
+  const accessToken = context.get(tokenContext);
+  const formData = await request.formData();
+  const orderRequest = JSON.parse(formData.get("order") as string);
+
+  try {
+    await createOrder(accessToken, orderRequest);
+    return { success: true as const };
+  } catch (error) {
+    console.log("Checkout failed:", error);
+    return {
+      success: false as const,
+      error: "Something went wrong with creating the order. Please try again.",
+    };
+  }
 }
 
 export function HydrateFallback() {
@@ -42,8 +61,25 @@ export function ErrorBoundary() {
 
 export default function ProductsPage() {
   const { products } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<typeof action>();
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
+  const [cartLoaded, setCartLoaded] = useState(false);
   const [showCart, setShowCart] = useState(false);
+
+  useEffect(() => {
+    try {
+      const savedCart = sessionStorage.getItem("cart");
+      if (savedCart) {
+        setCartItems(JSON.parse(savedCart));
+      }
+    } catch {}
+    setCartLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!cartLoaded) return;
+    sessionStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems, cartLoaded]);
 
   function addToCart(product: Product) {
     const index = cartItems.findIndex((item) => item.id === product.id);
@@ -111,6 +147,32 @@ export default function ProductsPage() {
     setCartItems(updatedItems);
   }
 
+  function handleCheckout() {
+  if (cartItems.length === 0) {
+    alert("Cart is empty");
+    return;
+  }
+
+  const orderRequest = {
+    items: cartItems.map((item) => ({
+      productId: item.id,
+      quantity: item.quantity,
+    })),
+  };
+
+  fetcher.submit(
+    { order: JSON.stringify(orderRequest) },
+    { method: "post" },
+  );
+}
+
+useEffect(() => {
+  if (fetcher.data?.success) {
+    setCartItems([]);
+    alert("Order is created");
+  }
+}, [fetcher.data]);
+
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-12">
       <h1 className="text-3xl font-bold">Products</h1>
@@ -135,6 +197,7 @@ export default function ProductsPage() {
           items={cartItems}
           onIncrease={increaseQuantity}
           onDecrease={decreaseQuantity}
+          onCheckout={handleCheckout}
           onClose={() => setShowCart(false)}
         />
       )}
