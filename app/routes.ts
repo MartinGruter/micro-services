@@ -10,6 +10,7 @@ export default [
         route("products", "routes/productsPage.tsx"),
         layout("routes/admin-layout.tsx", [
             route("admin/products", "routes/adminProductsPage.tsx"),
+            route("admin/products/new", "routes/createProductPage.tsx"),
         ]),
     ]),
 
