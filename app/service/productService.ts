@@ -64,3 +64,24 @@ export async function getProducts(accessToken: string): Promise<Product[]> {
 
   return response.json() as Promise<Product[]>;
 }
+
+export async function getProductById(accessToken: string, id: string): Promise<Product> {
+  if (!PRODUCT_SERVICE_URL) {
+    throw new Error("VITE_API_PRODUCT_SERVICE_URL is missing.");
+  }
+
+  const response = await fetch(
+    `${PRODUCT_SERVICE_URL.replace(/\/$/, "")}/products/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Unable to load product. Status: ${response.status}`);
+  }
+
+  return response.json() as Promise<Product>;
+}

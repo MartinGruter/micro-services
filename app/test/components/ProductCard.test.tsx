@@ -3,6 +3,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import type { Product } from "~/types/Product";
 import ProductCard from "~/components/ProductCard";
 import userEvent from "@testing-library/user-event";
+import { createRoutesStub } from "react-router";
 
 const product: Product = {
     id: 1,
@@ -20,7 +21,13 @@ afterEach(() => {
 
 describe("ProductCard", () => {
     it("visar ProductCard", () => {
-        render(<ProductCard product={product} onAdd={vi.fn()} />);
+        const Stub = createRoutesStub([
+            {
+                path: "/",
+                Component: () => <ProductCard product={product} onAdd={vi.fn()} />,
+            },
+        ]);
+        render(<Stub initialEntries={["/"]} />);
 
         expect(screen.getByText("Computer")).toBeInTheDocument();
         expect(screen.getByText("Very good computer")).toBeInTheDocument();
@@ -32,7 +39,13 @@ describe("ProductCard", () => {
         const onAdd = vi.fn();
         const user = userEvent.setup();
 
-        render(<ProductCard product={product} onAdd={onAdd} />);
+        const Stub = createRoutesStub([
+            {
+                path: "/",
+                Component: () => <ProductCard product={product} onAdd={onAdd} />,
+            },
+        ]);
+        render(<Stub initialEntries={["/"]} />);
 
         await user.click(screen.getByRole("button", { name: /add to cart/i }));
 
