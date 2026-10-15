@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { data, Link, useLoaderData } from "react-router";
 import { tokenContext } from "~/context/context";
 import { getProducts } from "~/service/productService";
 import { commitSession, getSession } from "~/sessions.server";
+import { categories } from "~/types/Category";
 import type { Route } from "./+types/adminProductsPage";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
@@ -17,6 +19,11 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 
 export default function AdminProductsPage() {
   const { products, message } = useLoaderData<typeof loader>();
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const filteredProducts = selectedCategory === "All"
+    ? products
+    : products.filter((product) => product.category === selectedCategory);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -29,8 +36,25 @@ export default function AdminProductsPage() {
       </Link>
       {message && <p role="status" className="mt-4">{message}</p>}
 
+      <div className="mt-6">
+        <label htmlFor="admin-category-filter" className="block text-sm">Category</label>
+        <select
+          id="admin-category-filter"
+          value={selectedCategory}
+          onChange={(event) => setSelectedCategory(event.target.value)}
+          className="mt-2 rounded-md border border-slate-500 bg-slate-900 px-4 py-2 text-slate-100"
+        >
+          <option value="All">All</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>{category}</option>
+          ))}
+        </select>
+      </div>
+
       {products.length === 0 ? (
         <p className="mt-6">No products found.</p>
+      ) : filteredProducts.length === 0 ? (
+        <p className="mt-6">No products found in this category.</p>
       ) : (
         <div className="mt-6 overflow-x-auto">
           <table className="w-full border-collapse text-left">
@@ -44,7 +68,7 @@ export default function AdminProductsPage() {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <tr
                   className="border-b border-slate-200 dark:border-slate-800"
                   key={product.id}
