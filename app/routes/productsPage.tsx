@@ -14,6 +14,7 @@ import type { Product } from "~/types/Product";
 import { createOrder } from "~/service/orderService";
 import Cart from "~/components/cart/Cart";
 import { categories } from "~/types/Category";
+import { SearchInput } from "~/components/Search/SearchInput";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const accessToken = context.get(tokenContext);
@@ -67,10 +68,17 @@ export default function ProductsPage() {
   const [cartLoaded, setCartLoaded] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const filteredProducts = selectedCategory === "All"
-    ? products
-    : products.filter((product) => product.category === selectedCategory);
+  const filteredProducts = products.filter((product) => {
+    const categoryMatch = selectedCategory === "All" || product.category === selectedCategory;
+
+    const query = searchTerm.trim().toLowerCase();
+
+    const searchMatch = query === "" || product.name.toLowerCase().includes(query) || (product.description ?? "").toLowerCase().includes(query);
+
+    return categoryMatch && searchMatch;
+  });
 
   useEffect(() => {
     try {
@@ -78,7 +86,7 @@ export default function ProductsPage() {
       if (savedCart) {
         setCartItems(JSON.parse(savedCart));
       }
-    } catch {}
+    } catch { }
     setCartLoaded(true);
   }, []);
 
@@ -154,58 +162,67 @@ export default function ProductsPage() {
   }
 
   function handleCheckout() {
-  if (cartItems.length === 0) {
-    alert("Cart is empty");
-    return;
+    if (cartItems.length === 0) {
+      alert("Cart is empty");
+      return;
+    }
+
+    const orderRequest = {
+      items: cartItems.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
+    };
+
+    fetcher.submit(
+      { order: JSON.stringify(orderRequest) },
+      { method: "post" },
+    );
   }
 
-  const orderRequest = {
-    items: cartItems.map((item) => ({
-      productId: item.id,
-      quantity: item.quantity,
-    })),
-  };
-
-  fetcher.submit(
-    { order: JSON.stringify(orderRequest) },
-    { method: "post" },
-  );
-}
-
-useEffect(() => {
-  if (fetcher.data?.success) {
-    setCartItems([]);
-    alert("Order is created");
-  }
-}, [fetcher.data]);
+  useEffect(() => {
+    if (fetcher.data?.success) {
+      setCartItems([]);
+      alert("Order is created");
+    }
+  }, [fetcher.data]);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-12">
       <h1 className="text-3xl font-bold">Products</h1>
-      <div className="mt-6">
-        <label htmlFor="category-filter" className="block text-sm">Category</label>
-        <select
-          id="category-filter"
-          value={selectedCategory}
-          onChange={(event) => setSelectedCategory(event.target.value)}
-          className="mt-2 rounded-md border border-slate-500 bg-slate-900 px-4 py-2 text-slate-100"
-        >
-          <option value="All">All</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>{category}</option>
-          ))}
-        </select>
+
+      <div className="mt-6 flex gap-8">
+        <div>
+          <label htmlFor="category-filter" className="block text-sm">Category</label>
+          <select
+            id="category-filter"
+            value={selectedCategory}
+            onChange={(event) => setSelectedCategory(event.target.value)}
+            className="mt-2 rounded-md border border-slate-500 bg-slate-900 px-4 py-2 text-slate-100"
+          >
+            <option value="All">All</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>{category}</option>
+            ))}
+          </select>
+        </div>
+        <SearchInput searchTerm={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
       </div>
+
       {products.length === 0 && (
         <p className="mt-6 text-slate-600 dark:text-slate-300">
           No products are available.
         </p>
       )}
+
       {products.length > 0 && filteredProducts.length === 0 && (
         <p className="mt-6 text-slate-600 dark:text-slate-300">
-          No products found in this category.
+          {searchTerm.trim()
+            ? `No products match "${searchTerm}".`
+            : "No products found in this category."}
         </p>
       )}
+
       {filteredProducts.length > 0 && (
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredProducts.map((product) => (
@@ -213,6 +230,7 @@ useEffect(() => {
           ))}
         </div>
       )}
+
       <button onClick={() => setShowCart(!showCart)}>
         {showCart ? "Hide cart" : "Show cart"}
       </button>
