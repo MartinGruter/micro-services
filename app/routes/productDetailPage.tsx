@@ -40,8 +40,42 @@ export default function ProductDetailPage() {
     const { product } = useLoaderData<typeof loader>();
 
     return (
-        <main>
-            <h1>{product.name}</h1>
+        <main className="w-full max-w-4xl mx-auto px-4 py-12">
+            <div className="grid gap-8 sm:grid-cols-2">
+                {product.imageUrl ? (
+                    <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="aspect-video rounded object-cover"
+                    />
+                ) : (
+                    <div className="aspect-video flex items-center justify-center rounded text-slate-500 bg-slate-800">
+                        No image
+                    </div>
+                )}
+
+                <div>
+                    <span className="mt-6 px-3 py-1 inline-block rounded-full text-xs font-medium text-slate-300 bg-slate-800">
+                        {product.category}
+                    </span>
+
+                    <h1 className="mt-4 text-3xl font-bold">{product.name}</h1>
+
+                    <p className="mt-2 flex items-baseline gap-4 text-xl font-semibold">
+                        {product.price.toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                        })}
+                        <span className="text-sm text-slate-400">
+                            {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+                        </span>
+                    </p>
+
+                    <p className="mt-6 text-slate-300">
+                        {product.description}
+                    </p>
+                </div>
+            </div>
         </main>
     );
 }
