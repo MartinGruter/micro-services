@@ -8,6 +8,18 @@ type ProductProps = {
 const ProductCard = ({ product, onAdd }: ProductProps) => {
   return (
     <article className="rounded-lg border border-slate-300 p-5 shadow-sm dark:border-slate-700">
+      {product.imageUrl ? (
+        <img
+          src={product.imageUrl}
+          alt={product.name}
+          className="mb-4 h-48 w-full rounded object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div className="mb-4 flex h-48 w-full items-center justify-center rounded bg-slate-200 text-slate-500 dark:bg-slate-800">
+          No image
+        </div>
+      )}
       <h2 className="text-xl font-semibold">{product.name}</h2>
       <p className="mt-3 text-slate-600 dark:text-slate-300">
         {product.description}
