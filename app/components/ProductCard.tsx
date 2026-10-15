@@ -27,7 +27,11 @@ const ProductCard = ({ product, onAdd }: ProductProps) => {
           <dd>{product.stock}</dd>
         </div>
       </dl>
-      <button onClick={() => onAdd(product)}>
+      <button
+        type="button"
+        onClick={() => onAdd(product)}
+        className="mt-4 rounded-md border border-slate-500 px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-800 hover:text-slate-100"
+      >
         Add to cart
       </button>
     </article>

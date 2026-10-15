@@ -7,7 +7,8 @@ export const Header = () => {
     const rootData = useRouteLoaderData<typeof rootLoader>("root");
     const isLoggedIn = rootData?.isLoggedIn ?? false;
 
-    return <header className="px-5 py-4 flex justify-between border-b border-slate-800">
+    return <header className="border-b border-slate-800">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4">
         <div>
             <h3 className="text-3xl font-bold">BlackMarqet</h3>
         </div>
@@ -18,5 +19,6 @@ export const Header = () => {
             </ul>
             <AuthBtn isLoggedIn={isLoggedIn} />
         </nav>
+        </div>
     </header>;
 }
