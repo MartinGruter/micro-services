@@ -75,7 +75,7 @@ export default function ProductsPage() {
 
     const query = searchTerm.trim().toLowerCase();
 
-    const searchMatch = query === "" || product.name.toLowerCase().includes(query) || product.description.toLowerCase().includes(query);
+    const searchMatch = query === "" || product.name.toLowerCase().includes(query) || (product.description ?? "").toLowerCase().includes(query);
 
     return categoryMatch && searchMatch;
   });
