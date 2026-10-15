@@ -54,10 +54,18 @@ const Cart = ({ items, onIncrease, onDecrease, onClose, onCheckout }: CartProps)
             <footer className="px-6 py-5 flex items-baseline justify-between border-t border-[#9c9177]/20">
                 <span className="text-sm text-slate-200">Total:</span>
                 <strong className="text-xl">
-                    {totalPrice.toFixed(2)} $
+                    ${totalPrice.toFixed(2)}
                 </strong>
             </footer>
-            <button onClick={onCheckout}>Send order</button>
+            <div className="px-6 pb-6">
+                <button
+                    type="button"
+                    onClick={onCheckout}
+                    className="w-full rounded-md border border-slate-500 px-4 py-3 text-sm font-medium text-slate-100 transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-300"
+                >
+                    Send order
+                </button>
+            </div>
         </aside>
     </>
 }

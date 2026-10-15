@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { IoChevronDown } from "react-icons/io5";
 import {
   isRouteErrorResponse,
   useLoaderData,
@@ -190,23 +191,32 @@ export default function ProductsPage() {
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-12">
       <h1 className="text-3xl font-bold">Products</h1>
-
-      <div className="mt-6 flex gap-8">
+      <div className="mt-6 flex items-end justify-between gap-4">
         <div>
           <label htmlFor="category-filter" className="block text-sm">Category</label>
-          <select
-            id="category-filter"
-            value={selectedCategory}
-            onChange={(event) => setSelectedCategory(event.target.value)}
-            className="mt-2 rounded-md border border-slate-500 bg-slate-900 px-4 py-2 text-slate-100"
-          >
-            <option value="All">All</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>{category}</option>
-            ))}
-          </select>
+          <div className="relative mt-2">
+            <select
+              id="category-filter"
+              value={selectedCategory}
+              onChange={(event) => setSelectedCategory(event.target.value)}
+              className="appearance-none rounded-md border border-slate-500 bg-slate-900 py-2 pl-4 pr-10 text-slate-100"
+            >
+              <option value="All">All</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+            <IoChevronDown aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-slate-100" />
+          </div>
         </div>
         <SearchInput searchTerm={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+        <button
+          type="button"
+          onClick={() => setShowCart(!showCart)}
+          className="shrink-0 rounded-md border border-slate-500 px-4 py-2 text-sm transition-colors hover:bg-slate-800 hover:text-slate-100"
+        >
+          {showCart ? "Hide cart" : "Show cart"}
+        </button>
       </div>
 
       {products.length === 0 && (
@@ -230,10 +240,6 @@ export default function ProductsPage() {
           ))}
         </div>
       )}
-
-      <button onClick={() => setShowCart(!showCart)}>
-        {showCart ? "Hide cart" : "Show cart"}
-      </button>
 
       {showCart && (
         <Cart
