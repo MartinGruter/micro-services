@@ -12,18 +12,24 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const message = session.get("productCreated");
 
-  return data({ products, message }, {
-    headers: message ? { "Set-Cookie": await commitSession(session) } : undefined,
-  });
+  return data(
+    { products, message },
+    {
+      headers: message
+        ? { "Set-Cookie": await commitSession(session) }
+        : undefined,
+    },
+  );
 }
 
 export default function AdminProductsPage() {
   const { products, message } = useLoaderData<typeof loader>();
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const filteredProducts = selectedCategory === "All"
-    ? products
-    : products.filter((product) => product.category === selectedCategory);
+  const filteredProducts =
+    selectedCategory === "All"
+      ? products
+      : products.filter((product) => product.category === selectedCategory);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -34,10 +40,16 @@ export default function AdminProductsPage() {
       >
         Create product
       </Link>
-      {message && <p role="status" className="mt-4">{message}</p>}
+      {message && (
+        <p role="status" className="mt-4">
+          {message}
+        </p>
+      )}
 
       <div className="mt-6">
-        <label htmlFor="admin-category-filter" className="block text-sm">Category</label>
+        <label htmlFor="admin-category-filter" className="block text-sm">
+          Category
+        </label>
         <select
           id="admin-category-filter"
           value={selectedCategory}
@@ -46,7 +58,9 @@ export default function AdminProductsPage() {
         >
           <option value="All">All</option>
           {categories.map((category) => (
-            <option key={category} value={category}>{category}</option>
+            <option key={category} value={category}>
+              {category}
+            </option>
           ))}
         </select>
       </div>
@@ -60,6 +74,7 @@ export default function AdminProductsPage() {
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="border-b border-slate-300 dark:border-slate-700">
+                <th className="px-3 py-3">Image</th>
                 <th className="px-3 py-3">ID</th>
                 <th className="px-3 py-3">Name</th>
                 <th className="px-3 py-3">Description</th>
@@ -73,6 +88,18 @@ export default function AdminProductsPage() {
                   className="border-b border-slate-200 dark:border-slate-800"
                   key={product.id}
                 >
+                  <td className="px-3 py-3">
+                    {product.imageUrl ? (
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="h-12 w-12 rounded object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span className="text-slate-500">-</span>
+                    )}
+                  </td>
                   <td className="px-3 py-3">{product.id}</td>
                   <td className="px-3 py-3">{product.name}</td>
                   <td className="px-3 py-3">{product.description}</td>
