@@ -2,13 +2,13 @@ import { getSession } from "~/sessions.server";
 import type { LoginRequest } from "~/types/LoginRequest";
 import type { TokenResponse } from "~/types/TokenResponse";
 
-const AUTH_URL = `${import.meta.env.VITE_API_AUTH_SERVICE_URL}/auth`;
+const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL;
 
 export async function login(
   loginRequest: LoginRequest,
 ): Promise<TokenResponse | undefined> {
   try {
-    const response = await fetch(`${AUTH_URL}/login`, {
+    const response = await fetch(`${GATEWAY_URL.replace(/\/$/, "")}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginRequest),
