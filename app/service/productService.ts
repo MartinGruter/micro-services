@@ -1,19 +1,19 @@
 import type { Product } from "~/types/Product";
 import type { ProductRequest } from "~/types/ProductRequest";
 
-const PRODUCT_SERVICE_URL = import.meta.env.VITE_API_PRODUCT_SERVICE_URL;
+const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL;
 
 export async function createProduct(
   product: ProductRequest,
   accessToken: string,
 ): Promise<Product> {
-  if (!PRODUCT_SERVICE_URL) {
+  if (!GATEWAY_URL) {
     throw new Error("Product service is not configured.");
   }
 
   let response: Response;
   try {
-    response = await fetch(`${PRODUCT_SERVICE_URL.replace(/\/$/, "")}/products`, {
+    response = await fetch(`${GATEWAY_URL.replace(/\/$/, "")}/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,12 +42,12 @@ export async function createProduct(
 }
 
 export async function getProducts(accessToken: string): Promise<Product[]> {
-  if (!PRODUCT_SERVICE_URL) {
-    throw new Error("VITE_API_PRODUCT_SERVICE_URL is missing.");
+  if (!GATEWAY_URL) {
+    throw new Error("VITE_GATEWAY_URL is missing.");
   }
 
   const response = await fetch(
-    `${PRODUCT_SERVICE_URL.replace(/\/$/, "")}/products`,
+    `${GATEWAY_URL.replace(/\/$/, "")}/products`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -66,12 +66,12 @@ export async function getProducts(accessToken: string): Promise<Product[]> {
 }
 
 export async function getProductById(accessToken: string, id: string): Promise<Product> {
-  if (!PRODUCT_SERVICE_URL) {
-    throw new Error("VITE_API_PRODUCT_SERVICE_URL is missing.");
+  if (!GATEWAY_URL) {
+    throw new Error("VITE_GATEWAY_URL is missing.");
   }
 
   const response = await fetch(
-    `${PRODUCT_SERVICE_URL.replace(/\/$/, "")}/products/${id}`,
+    `${GATEWAY_URL.replace(/\/$/, "")}/products/${id}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
