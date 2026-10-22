@@ -1,12 +1,12 @@
 import type { OrderRequestDTO } from "../types/Order";
 
-const API_URL = import.meta.env.VITE_API_ORDER_SERVICE_URL;
+const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL;
 
 export const createOrder = async (
   accessToken: string,
   order: OrderRequestDTO,
 ) => {
-  const response = await fetch(`${API_URL.replace(/\/$/, "")}/orders`, {
+  const response = await fetch(`${GATEWAY_URL.replace(/\/$/, "")}/orders`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
