@@ -8,7 +8,7 @@ export async function login(
   loginRequest: LoginRequest,
 ): Promise<TokenResponse | undefined> {
   try {
-    const response = await fetch(`${GATEWAY_URL.replace(/\/$/, "")}/login`, {
+    const response = await fetch(`${GATEWAY_URL.replace(/\/$/, "")}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginRequest),
