@@ -32,7 +32,8 @@ describe("ProductCard", () => {
         expect(screen.getByText("Computer")).toBeInTheDocument();
         expect(screen.getByText("Very good computer")).toBeInTheDocument();
         expect(screen.getByText("$499.00")).toBeInTheDocument();
-        expect(screen.getByText("10")).toBeInTheDocument();
+        expect(screen.getByText("10 in stock")).toBeInTheDocument();
+        expect(screen.getByText("ELECTRONICS")).toBeInTheDocument();
     });
 
     it("anropar onAdd", async () => {
