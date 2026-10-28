@@ -16,7 +16,10 @@ export const CartItem = ({ item, onIncrease, onDecrease }: CartItemProps) => {
                 {item.name}
             </h3>
             <p className="shrink-0 text-sm text-slate-600 dark:text-slate-300">
-                {lineTotal.toFixed(2)} $
+                {lineTotal.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                })}
             </p>
         </div>
 
