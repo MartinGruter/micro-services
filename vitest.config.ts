@@ -7,6 +7,10 @@ export default defineConfig({
         tsconfigPaths: true,
     },
     test: {
+        env: {
+            SESSION_SECRET: "msw-test-only-session-secret",
+            VITE_GATEWAY_URL: "http://gateway.test/gateway",
+        },
         environment: "jsdom",
         setupFiles: ["./app/test/setup.ts"],
     },
