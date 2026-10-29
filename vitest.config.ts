@@ -7,6 +7,9 @@ export default defineConfig({
         tsconfigPaths: true,
     },
     test: {
+        env: {
+            VITE_GATEWAY_URL: "http://gateway.test/gateway",
+        },
         environment: "jsdom",
         setupFiles: ["./app/test/setup.ts"],
     },
