@@ -35,7 +35,7 @@ export default function WelcomePage({ loaderData }: Route.ComponentProps) {
                 className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-950 dark:text-blue-200"
                 key={role}
               >
-                {role}
+                {role.replace("ROLE_", "")}
               </li>
             ))}
           </ul>

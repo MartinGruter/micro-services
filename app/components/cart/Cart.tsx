@@ -20,27 +20,27 @@ const Cart = ({ items, onIncrease, onDecrease, onClose, onCheckout }: CartProps)
             className="fixed inset-0 z-40 bg-black/60"
             onClick={onClose}
         />
-        <aside className="w-full max-w-sm fixed inset-y-0 right-0 z-50 flex flex-col bg-slate-900 select-none">
-            <header className="px-6 py-5 flex items-center justify-between border-b border-[#9c9177]/20">
+        <aside className="w-full max-w-sm fixed inset-y-0 right-0 z-50 flex flex-col bg-white dark:bg-slate-900 select-none">
+            <header className="px-6 py-5 flex items-center justify-between border-b border-slate-200 dark:border-[#9c9177]/20">
                 <div>
-                    <p className="text-[10px] tracking-[0.25em] text-slate-400">
+                    <p className="text-[10px] tracking-[0.25em] text-slate-500 dark:text-slate-400">
                         BLACKMARQET
                     </p>
                     <h2 className="mt-1 text-xl font-medium">
                         The Manifest
                     </h2>
                 </div>
-                <IoClose className="size-8 p-1 rounded-md cursor-pointer hover:bg-slate-300/10" onClick={onClose} />
+                <IoClose className="size-8 p-1 rounded-md cursor-pointer text-slate-700 hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-300/10" onClick={onClose} />
             </header>
 
             <div className="px-6 py-4 flex-1 overflow-y-auto">
                 {
                     items.length === 0 ? (
-                        <p className="mt-10 text-center text-sm text-slate-400">
+                        <p className="mt-10 text-center text-sm text-slate-500 dark:text-slate-400">
                             Nothing's been claimed yet.
                         </p>
                     ) : (
-                        <ul className="divide-y divide-[#9c9177]/15">
+                        <ul className="divide-y divide-slate-200 dark:divide-[#9c9177]/15">
                             {
                                 items.map((item) => (
                                     <CartItem key={item.id} item={item} onIncrease={onIncrease} onDecrease={onDecrease} />
@@ -51,22 +51,25 @@ const Cart = ({ items, onIncrease, onDecrease, onClose, onCheckout }: CartProps)
                 }
             </div>
 
-            <footer className="px-6 py-5 flex items-baseline justify-between border-t border-[#9c9177]/20">
-                <span className="text-sm text-slate-200">Total:</span>
-                <strong className="text-xl">
-                    ${totalPrice.toFixed(2)}
-                </strong>
+            <footer className="px-6 py-5 flex flex-col items-baseline justify-between gap-4 border-t border-slate-200 dark:border-[#9c9177]/20">
+                <p className="w-full flex items-baseline justify-between">
+                    <span className="text-sm">Total:</span>
+                    <strong className="text-xl">
+                        $ {totalPrice.toFixed(2)}
+                    </strong>
+                </p>
+                <div className="w-full">
+                    <button
+                        type="button"
+                        onClick={onCheckout}
+                        className="cursor-pointer w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-medium text-slate-900 transition-colors hover:bg-slate-100 dark:border-slate-500 dark:text-slate-100 dark:hover:bg-slate-800"
+                    >
+                        Send order
+                    </button>
+                </div>
             </footer>
-            <div className="px-6 pb-6">
-                <button
-                    type="button"
-                    onClick={onCheckout}
-                    className="w-full rounded-md border border-slate-500 px-4 py-3 text-sm font-medium text-slate-100 transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-300"
-                >
-                    Send order
-                </button>
-            </div>
-        </aside>
+        </aside >
     </>
 }
+
 export default Cart;
