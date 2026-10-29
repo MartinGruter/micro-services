@@ -14,6 +14,8 @@ import { Footer } from "./components/Footer";
 
 import { Header } from "./components/Header";
 import { getSession } from "./sessions.server";
+import { CookieBanner } from "./components/CookieBanner";
+import { CookieProvider } from "./context/CookieContext";
 
 
 export const links: Route.LinksFunction = () => [
@@ -46,9 +48,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="min-h-screen grid grid-rows-[auto_1fr_auto]">
-        <Header />
-        {children}
-        <Footer />
+        <CookieProvider>
+          <Header />
+          {children}
+          <Footer />
+        </CookieProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

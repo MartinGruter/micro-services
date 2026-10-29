@@ -15,7 +15,7 @@ export default function ProductForm({ values, error, isSubmitting = false }: Pro
         <Form method="post" className="space-y-6">
             {error && <p role="alert" className="text-red-700 dark:text-red-300">{error}</p>}
             <div>
-                <label htmlFor="name" className="block text-sm">
+                <label htmlFor="name" className="block text-sm text-slate-700 dark:text-slate-300">
                     Name
                 </label>
                 <input
@@ -23,13 +23,13 @@ export default function ProductForm({ values, error, isSubmitting = false }: Pro
                     name="name"
                     defaultValue={values?.name}
                     type="text"
-                    className="mt-2 w-full rounded-md border border-slate-500 bg-transparent px-4 py-2"
+                    className="w-full mt-2 px-4 py-2 rounded-md border border-slate-300 bg-transparent text-slate-900 dark:border-slate-500 dark:text-slate-100"
                     required
                 />
             </div>
 
             <div>
-                <label htmlFor="description" className="block text-sm">
+                <label htmlFor="description" className="block text-sm text-slate-700 dark:text-slate-300">
                     Description
                 </label>
                 <textarea
@@ -37,13 +37,13 @@ export default function ProductForm({ values, error, isSubmitting = false }: Pro
                     name="description"
                     defaultValue={values?.description}
                     rows={4}
-                    className="mt-2 w-full rounded-md border border-slate-500 bg-transparent px-4 py-2"
+                    className="w-full mt-2 px-4 py-2 rounded-md border border-slate-300 bg-transparent text-slate-900 dark:border-slate-500 dark:text-slate-100"
                     maxLength={1000}
                 />
             </div>
 
             <div>
-                <label htmlFor="price" className="block text-sm">
+                <label htmlFor="price" className="block text-sm text-slate-700 dark:text-slate-300">
                     Price (USD)
                 </label>
                 <input
@@ -52,14 +52,14 @@ export default function ProductForm({ values, error, isSubmitting = false }: Pro
                     defaultValue={values?.price}
                     type="number"
                     step="0.01"
-                    className="mt-2 w-full rounded-md border border-slate-500 bg-transparent px-4 py-2"
+                    className="w-full mt-2 px-4 py-2 rounded-md border border-slate-300 bg-transparent text-slate-900 dark:border-slate-500 dark:text-slate-100"
                     required
                     min={0.01}
                 />
             </div>
 
             <div>
-                <label htmlFor="stock" className="block text-sm">
+                <label htmlFor="stock" className="block text-sm text-slate-700 dark:text-slate-300">
                     Stock
                 </label>
                 <input
@@ -68,14 +68,14 @@ export default function ProductForm({ values, error, isSubmitting = false }: Pro
                     defaultValue={values?.stock}
                     type="number"
                     step="1"
-                    className="mt-2 w-full rounded-md border border-slate-500 bg-transparent px-4 py-2"
+                    className="w-full mt-2 px-4 py-2 rounded-md border border-slate-300 bg-transparent text-slate-900 dark:border-slate-500 dark:text-slate-100"
                     required
                     min={0}
                 />
             </div>
 
             <div>
-                <label htmlFor="category" className="block text-sm">
+                <label htmlFor="category" className="block text-sm text-slate-700 dark:text-slate-300">
                     Category
                 </label>
                 <select
@@ -83,7 +83,7 @@ export default function ProductForm({ values, error, isSubmitting = false }: Pro
                     name="category"
                     defaultValue={values?.category ?? ""}
                     required
-                    className="mt-2 w-full rounded-md border border-slate-500 bg-slate-900 px-4 py-2 text-slate-100"
+                    className="w-full mt-2 px-4 py-2 rounded-md border border-slate-300 text-slate-900 bg-white dark:border-slate-500 dark:bg-slate-900 dark:text-slate-100"
                 >
                     <option value="" disabled>
                         Select a category
@@ -97,7 +97,7 @@ export default function ProductForm({ values, error, isSubmitting = false }: Pro
             </div>
 
             <div>
-                <label htmlFor="imageUrl" className="block text-sm">
+                <label htmlFor="imageUrl" className="block text-sm text-slate-700 dark:text-slate-300">
                     Image URL
                 </label>
                 <input
@@ -106,14 +106,14 @@ export default function ProductForm({ values, error, isSubmitting = false }: Pro
                     defaultValue={values?.imageUrl}
                     type="url"
                     required
-                    className="mt-2 w-full rounded-md border border-slate-500 bg-transparent px-4 py-2"
+                    className="w-full mt-2 px-4 py-2 rounded-md border border-slate-300 bg-transparent text-slate-900 dark:border-slate-500 dark:text-slate-100"
                 />
             </div>
 
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className="rounded-sm border-2 border-slate-600 px-6 py-3 text-sm font-medium transition-colors hover:bg-slate-800 hover:text-slate-100 disabled:opacity-50"
+                className="cursor-pointer px-6 py-2 rounded-sm border-2 border-slate-400 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100"
             >
                 {isSubmitting ? "Creating product..." : "Create product"}
             </button>
