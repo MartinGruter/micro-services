@@ -4,7 +4,8 @@ import { Form, Link } from "react-router";
 export const AuthBtn = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     return isLoggedIn ? (
         <Form action="/logout" method="post">
-            <button type="submit" className="px-4 py-2 flex items-center gap-2 rounded text-white bg-slate-800 hover:bg-slate-700 transition-colors duration-150">
+            <button type="submit"
+                className="cursor-pointer px-4 py-2 flex items-center gap-2 rounded text-white bg-slate-700 hover:bg-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors duration-150">
                 Logout
                 <IoLogOutOutline className="size-6" />
             </button>
@@ -12,7 +13,7 @@ export const AuthBtn = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     ) : (
         <Link
             to="/login"
-            className="px-4 py-2 flex items-center gap-2 rounded text-white bg-slate-800 hover:bg-slate-700 transition-colors duration-150"
+            className="px-4 py-2 flex items-center gap-2 rounded text-white bg-slate-700 hover:bg-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors duration-150"
         >
             Login
             <IoLogInOutline className="size-6" />

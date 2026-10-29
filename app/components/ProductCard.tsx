@@ -8,48 +8,57 @@ type ProductProps = {
 
 const ProductCard = ({ product, onAdd }: ProductProps) => {
   return (
-    <article className="rounded-lg border border-slate-300 p-5 shadow-sm dark:border-slate-700">
+    <article className="p-3 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
       <Link to={`/products/${product.id}`}>
         {product.imageUrl ? (
           <img
             src={product.imageUrl}
             alt={product.name}
-            className="mb-4 h-48 w-full rounded object-cover"
+            className="h-48 w-full rounded object-cover"
             loading="lazy"
           />
         ) : (
-          <div className="mb-4 flex h-48 w-full items-center justify-center rounded bg-slate-200 text-slate-500 dark:bg-slate-800">
+          <div className="w-full h-48 flex items-center justify-center rounded text-slate-500 bg-slate-100 dark:bg-slate-800">
             No image
           </div>
         )}
-        <h2 className="text-xl font-semibold">{product.name}</h2>
-        <p className="mt-3 text-slate-600 dark:text-slate-300">
-          {product.description}
-        </p>
-        <dl className="mt-5 space-y-2">
-          <div className="flex justify-between gap-4">
-            <dt className="font-medium">Price</dt>
-            <dd>
+
+        <div className="mt-4 mb-4">
+          <span className="w-fit px-3 py-1 rounded-full text-xs font-medium text-slate-700 bg-slate-100 dark:bg-slate-800 dark:text-slate-300">
+            {product.category}
+          </span>
+
+          <h2 className="mt-3 text-xl font-semibold">
+            {product.name}
+          </h2>
+
+          <p className="mt-2 line-clamp-2 text-sm text-slate-600 dark:text-slate-300">
+            {product.description}
+          </p>
+
+          <div className="mt-4 flex items-baseline justify-between">
+            <span className="text-lg font-semibold text-slate-900 dark:text-slate-100">
               {product.price.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
               })}
-            </dd>
+            </span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+            </span>
           </div>
-          <div className="flex justify-between gap-4">
-            <dt className="font-medium">Stock</dt>
-            <dd>{product.stock}</dd>
-          </div>
-        </dl>
+        </div>
       </Link>
+
       <button
         type="button"
         onClick={() => onAdd(product)}
-        className="mt-4 rounded-md border border-slate-500 px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-800 hover:text-slate-100"
+        className="cursor-pointer w-full py-2 rounded-md border border-slate-300 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-500 dark:text-slate-300 dark:hover:bg-slate-800"
       >
         Add to cart
       </button>
     </article>
   );
 };
+
 export default ProductCard;

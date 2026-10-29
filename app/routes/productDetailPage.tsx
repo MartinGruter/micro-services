@@ -11,7 +11,7 @@ export async function loader({ context, params }: Route.LoaderArgs) {
 export function HydrateFallback() {
     return (
         <main className="w-full max-w-3xl mx-auto px-4 py-12">
-            <p>Loading product...</p>
+            <p className="text-slate-700 dark:text-slate-300">Loading product...</p>
         </main>
     );
 }
@@ -22,7 +22,7 @@ export function ErrorBoundary() {
     if (isRouteErrorResponse(error) && error.status === 404) {
         return (
             <main className="w-full max-w-3xl mx-auto px-4 py-12">
-                <p className="text-slate-300">
+                <p className="text-slate-600 dark:text-slate-300">
                     This product doesn't exist or has been removed.
                 </p>
             </main>
@@ -31,7 +31,7 @@ export function ErrorBoundary() {
 
     return (
         <main className="w-full max-w-3xl mx-auto px-4 py-12 text-center">
-            <p className="text-red-300">There was something wrong with loading the product</p>
+            <p className="text-red-600 dark:text-red-300">There was something wrong with loading the product</p>
         </main>
     );
 }
@@ -49,13 +49,13 @@ export default function ProductDetailPage() {
                         className="aspect-video rounded object-cover"
                     />
                 ) : (
-                    <div className="aspect-video flex items-center justify-center rounded text-slate-500 bg-slate-800">
+                    <div className="aspect-video flex items-center justify-center rounded text-slate-500 bg-slate-200 dark:bg-slate-800">
                         No image
                     </div>
                 )}
 
                 <div>
-                    <span className="mt-6 px-3 py-1 inline-block rounded-full text-xs font-medium text-slate-300 bg-slate-800">
+                    <span className="mt-6 px-3 py-1 inline-block rounded-full text-xs font-medium text-slate-700 bg-slate-200 dark:text-slate-300 dark:bg-slate-800">
                         {product.category}
                     </span>
 
@@ -71,7 +71,7 @@ export default function ProductDetailPage() {
                         </span>
                     </p>
 
-                    <p className="mt-6 text-slate-300">
+                    <p className="mt-6 text-slate-600 dark:text-slate-300">
                         {product.description}
                     </p>
                 </div>

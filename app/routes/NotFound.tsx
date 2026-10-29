@@ -23,14 +23,14 @@ export default function NotFound() {
                 <h1 className="text-2xl font-medium">
                     This listing went dark.
                 </h1>
-                <p className="max-w-xs mx-auto mt-4 text-slate-400 leading-relaxed">
+                <p className="max-w-xs mx-auto mt-4 text-slate-500 dark:text-slate-400 leading-relaxed">
                     Maybe it never existed. Maybe someone made sure it wouldn't. Either
                     way, there's nothing here under that name.
                 </p>
 
                 <Link
                     to="/"
-                    className="mt-10 px-6 py-3 inline-flex items-center rounded-sm border-2 border-slate-600 text-sm text-slate-400 font-medium transition-colors hover:bg-slate-800 hover:text-slate-100"
+                    className="mt-10 px-6 py-3 inline-flex items-center rounded-sm border-2 border-slate-400 text-sm text-slate-600 font-medium transition-colors hover:bg-slate-100 hover:text-slate-900 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
                 >
                     Back to the market
                 </Link>
