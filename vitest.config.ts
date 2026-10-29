@@ -8,6 +8,7 @@ export default defineConfig({
     },
     test: {
         env: {
+            SESSION_SECRET: "msw-test-only-session-secret",
             VITE_GATEWAY_URL: "http://gateway.test/gateway",
         },
         environment: "jsdom",
