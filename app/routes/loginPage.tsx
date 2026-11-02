@@ -24,13 +24,18 @@ export function meta() {
 }
 
 export async function action({ request }: Route.ActionArgs) {
+	console.log("LoginPage action called", request.headers.get("Origin"));
 	const session = await getSession(request.headers.get("Cookie"));
 
 	const formData = await request.formData();
 	const username = formData.get("username") as string;
 	const password = formData.get("password") as string;
 
+	console.log(username, password);
+
 	const tokenResponse = await login({ username, password });
+
+	console.log("Passed login service call");
 
 	if (!tokenResponse) {
 		return { error: "Wrong username or password." };
